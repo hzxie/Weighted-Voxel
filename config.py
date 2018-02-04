@@ -20,10 +20,6 @@ cfg = __C
 #
 # Common
 #
-__C.DATASET 						= edict()
-__C.DATASET.TAXONOMY_FILE_PATH      = './datasets/ShapeNet.json'
-__C.DATASET.MIN_VOXEL_VALUE         = -53
-
 __C.CONST                           = edict()
 __C.CONST.DEVICE                    = 'cuda0'
 __C.CONST.RNG_SEED                  = 0
@@ -32,15 +28,17 @@ __C.CONST.IMG_H                     = 127
 __C.CONST.N_VOX                     = 32
 __C.CONST.N_GRU_VOX                 = 4
 __C.CONST.N_VIEWS                   = 5
-__C.CONST.BATCH_SIZE                = 36
+__C.CONST.BATCH_SIZE                = 20
 __C.CONST.NETWORK_CLASS             = 'ResidualGRUNet'
 __C.CONST.WEIGHTS                   = ''         # When set, load the weights from the file
+__C.CONST.MIN_VOXEL_VALUE           = -53
 
 #
 # Directories
 #
 __C.DIR = edict()
-__C.DIR.SHAPENET_QUERY_PATH         = './datasets/ShapeNet/ShapeNetVox32/'
+__C.DIR.DATASET_TAXONOMY_FILE_PATH  = './datasets/ShapeNet.json'
+__C.DIR.DATASET_QUERY_PATH          = './datasets/ShapeNet/ShapeNetVox32/'
 __C.DIR.VOXEL_PATH                  = './datasets/ShapeNet/ShapeNetVox32/%s/%s/model.binvox'
 __C.DIR.RENDERING_PATH              = './datasets/ShapeNet/ShapeNetRendering/%s/%s/rendering'
 __C.DIR.OUT_PATH                    = './output'
@@ -53,7 +51,7 @@ __C.TRAIN.RESUME_TRAIN              = False
 __C.TRAIN.INITIAL_ITERATION         = 0         # when the training resumes, set the iteration number
 __C.TRAIN.DATASET_PORTION           = [0, .8]
 ## Data worker
-__C.TRAIN.NUM_WORKER                = 2         # number of data workers
+__C.TRAIN.NUM_WORKER                = 1         # number of data workers
 __C.TRAIN.NUM_ITERATION             = 20000     # maximum number of training iterations
 __C.TRAIN.NUM_RENDERING             = 24
 __C.TRAIN.NUM_VALIDATION_ITERATIONS = 24

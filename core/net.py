@@ -7,10 +7,11 @@
 # CHANGELOG:
 # - 2018/02/04 Removed unused `tensor4` and the option `is_x_tensor4`
 
-import datetime as dt
 import numpy as np
 import theano
 import theano.tensor as tensor
+
+from datetime import datetime as dt
 
 from core.layers import TensorProductLayer, ConvLayer, PoolLayer, Unpool3DLayer, \
     LeakyReLU, MseLoss3D, Conv3DLayer, InputLayer, FlattenLayer, \
@@ -66,10 +67,10 @@ class BaseNet(object):
             params_cpu.append(param.val.get_value())
         
         np.save(filename, params_cpu)
-        print('[INFO] %s Saving network parameters to %s' % (dt.datetime.now(), filename))
+        print('[INFO] %s Saving network parameters to %s' % (dt.now(), filename))
 
     def load(self, filename, ignore_param=True):
-        print('[INFO] %s Loading network parameters from %s' % (dt.datetime.now(), filename))
+        print('[INFO] %s Loading network parameters from %s' % (dt.now(), filename))
         params_cpu_file = np.load(filename)
         if filename.endswith('npz'):
             params_cpu = params_cpu_file[params_cpu_file.keys()[0]]
@@ -88,7 +89,7 @@ class BaseNet(object):
                     raise
 
 class ReconstructionNet(BaseNet):
-    def __init__(self, config, random_seed=dt.datetime.now().microsecond, compute_grad=True):
+    def __init__(self, config, random_seed=dt.now().microsecond, compute_grad=True):
         super(ReconstructionNet, self).__init__(config, random_seed, compute_grad)
 
     def network_definition(self):
