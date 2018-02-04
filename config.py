@@ -29,7 +29,6 @@ __C.CONST.N_VOX                     = 32
 __C.CONST.N_GRU_VOX                 = 4
 __C.CONST.N_VIEWS                   = 5
 __C.CONST.BATCH_SIZE                = 20
-__C.CONST.NETWORK_CLASS             = 'ResidualGRUNet'
 __C.CONST.WEIGHTS                   = ''         # When set, load the weights from the file
 __C.CONST.MIN_VOXEL_VALUE           = -53
 
@@ -73,7 +72,7 @@ __C.TRAIN.MOMENTUM                  = .9
 __C.TRAIN.DYNAMIC_LR_ITERATION      = 500       # the interation number that uses the policy to adjust learning rate
 __C.TRAIN.WEIGHT_DECAY              = 5e-6
 __C.TRAIN.LOSS_LIMIT                = 3000      # stop training if the loss exceeds the limit
-__C.TRAIN.SAVE_FREQ                 = 1000      # weights will be overwritten every save_freq
+__C.TRAIN.SAVE_FREQ                 = 1000     # weights will be overwritten every save_freq
 __C.TRAIN.PRINT_FREQ                = 50
 
 #

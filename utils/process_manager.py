@@ -15,6 +15,7 @@ import traceback
 from datetime import datetime as dt
 from multiprocessing import Process, Event
 from PIL import Image
+from six.moves import queue
 from time import sleep
 
 from utils.data_augmentation import preprocess_image

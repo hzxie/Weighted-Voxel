@@ -68,7 +68,6 @@ class Solver(object):
     def __init__(self, config, net):
         self.net            = net
         self.cfg            = config
-
         self.lr             = theano.shared(np.float32(1))
         self.iteration      = theano.shared(np.float32(0))  # starts from 0
         self._test          = None
@@ -101,7 +100,7 @@ class Solver(object):
         if self._train_loss is None:
             print('[INFO] %s Compiling training function, please wait ...' % (dt.now()))
             self._train_loss = theano.function(
-                [self.net.x, self.net.y], self.net.loss, updates=self.updates, profile=cfg.PROFILE)
+                [self.net.x, self.net.y], self.net.loss, updates=self.updates)
         self.iteration.set_value(self.iteration.get_value() + 1)
         
         return self._train_loss

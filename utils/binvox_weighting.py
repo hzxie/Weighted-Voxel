@@ -7,7 +7,7 @@ import numpy as np
 import os
 import sys
 
-OMEGA = 26
+OMEGA = 27
 VOXEL_MIN_VALUE = -53
 
 def transform_voxel_data(voxels, n_voxs):
