@@ -5,7 +5,7 @@
 # Updated by Haozhe Xie <cshzxie@gmail.com>
 # 
 # CHANGELOG:
-# - 2018/01/10 Add option: TRAIN.MIN_VOXEL_VALUE 
+# - 2018/01/10 Add option: DATASET.MIN_VOXEL_VALUE 
 # - 2018/01/20 Add option: TRAIN.DYNAMIC_LR_ITERATION 
 # - 2018/02/04 Remove unused config items
 
@@ -20,9 +20,9 @@ cfg = __C
 #
 # Common
 #
-__C.DATASET                         = './datasets/ShapeNet.json'
-__C.NET_NAME                        = 'res_gru_net'
-__C.PROFILE                         = False
+__C.DATASET 						= edict()
+__C.DATASET.TAXONOMY_FILE_PATH      = './datasets/ShapeNet.json'
+__C.DATASET.MIN_VOXEL_VALUE         = -53
 
 __C.CONST                           = edict()
 __C.CONST.DEVICE                    = 'cuda0'
@@ -30,7 +30,8 @@ __C.CONST.RNG_SEED                  = 0
 __C.CONST.IMG_W                     = 127
 __C.CONST.IMG_H                     = 127
 __C.CONST.N_VOX                     = 32
-__C.CONST.N_VIEWS                   = 1
+__C.CONST.N_GRU_VOX                 = 4
+__C.CONST.N_VIEWS                   = 5
 __C.CONST.BATCH_SIZE                = 36
 __C.CONST.NETWORK_CLASS             = 'ResidualGRUNet'
 __C.CONST.WEIGHTS                   = ''         # When set, load the weights from the file
@@ -58,10 +59,9 @@ __C.TRAIN.NUM_RENDERING             = 24
 __C.TRAIN.NUM_VALIDATION_ITERATIONS = 24
 __C.TRAIN.VALIDATION_FREQ           = 500
 __C.TRAIN.NAN_CHECK_FREQ            = 1000
-__C.TRAIN.RANDOM_NUM_VIEWS          = False     # feed in random # views if n_views > 1
+__C.TRAIN.RANDOM_NUM_VIEWS          = True      # feed in random # views if n_views > 1
 __C.TRAIN.QUEUE_SIZE                = 15        # maximum number of minibatches that can be put in a data queue
 ## Data augmentation
-__C.TRAIN.MIN_VOXEL_VALUE           = -53
 __C.TRAIN.RANDOM_CROP               = True
 __C.TRAIN.PAD_X                     = 10
 __C.TRAIN.PAD_Y                     = 10
