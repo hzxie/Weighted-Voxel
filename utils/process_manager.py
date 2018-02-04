@@ -169,7 +169,6 @@ class ReconstructionDataProcess(DataProcess):
             voxel = read_as_3d_array(f)
             # Set the original value to [MIN_VOXEL_VALUE, -MIN_VOXEL_VALUE] 
             # instead of [0, -MIN_VOXEL_VALUE * 2)
-            voxel.data  = voxel.data.astype(int)
             voxel.data += self.cfg.CONST.MIN_VOXEL_VALUE
 
         return voxel

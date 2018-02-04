@@ -14,11 +14,10 @@ from utils.data_io import category_model_id_pair
 from utils.process_manager import make_processes, kill_processes, get_while_running
 
 def get_iou(prediction, ground_truth, threshold):
-    preds_occupy = prediction[:, 1, :, :] >= threshold
-    intersection = np.sum(np.logical_and(preds_occupy, ground_truth[:, 1, :, :]))
-    union = np.sum(np.logical_or(preds_occupy, ground_truth[:, 1, :, :]))
-
-    print(intersection)
+    preds_occupy = prediction >= threshold
+    diff = np.sum(np.logical_xor(preds_occupy, ground_truth))
+    intersection = np.sum(np.logical_and(preds_occupy, ground_truth))
+    union = np.sum(np.logical_or(preds_occupy, ground_truth))
 
     return intersection / union
 
@@ -61,7 +60,7 @@ def test_net(cfg):
 
         ious = []
         for threshold in cfg.TEST.VOXEL_THRESH:
-            iou = get_iou(prediction[0, ...], voxel[0, ...], threshold)
+            iou = get_iou(prediction[0, :, 1, :, :], voxel[0, :, 1, :, :], threshold)
 
             if not c_id in results['categories'][threshold]:
                 results['categories'][threshold][c_id] = []
