@@ -79,7 +79,6 @@ __C.TRAIN.PRINT_FREQ                = 50
 # Testing options
 #
 __C.TEST                            = edict()
-__C.TEST.EXP_NAME                   = 'test'
 __C.TEST.DATASET_PORTION            = [.8, 1]
 __C.TEST.NO_BG_COLOR_RANGE          = [[240, 240], [240, 240], [240, 240]]
 __C.TEST.VOXEL_THRESH               = [5e-14]
