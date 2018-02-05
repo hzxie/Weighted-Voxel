@@ -37,8 +37,8 @@ __C.CONST.MIN_VOXEL_VALUE           = -53
 #
 __C.DIR = edict()
 __C.DIR.DATASET_TAXONOMY_FILE_PATH  = './datasets/ShapeNet.json'
-__C.DIR.DATASET_QUERY_PATH          = './datasets/ShapeNet/ShapeNetVox32/'
-__C.DIR.VOXEL_PATH                  = './datasets/ShapeNet/ShapeNetVox32/%s/%s/model.binvox'
+__C.DIR.DATASET_QUERY_PATH          = './datasets/ShapeNet/WeightedShapeNetVox32/'
+__C.DIR.VOXEL_PATH                  = './datasets/ShapeNet/WeightedShapeNetVox32/%s/%s/model.binvox'
 __C.DIR.RENDERING_PATH              = './datasets/ShapeNet/ShapeNetRendering/%s/%s/rendering'
 __C.DIR.OUT_PATH                    = './output'
 
