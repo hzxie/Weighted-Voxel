@@ -24,18 +24,21 @@ def max_or_nan(params):
     
     return nan_or_max_param
 
+def grad_clip(val, lower_bound, upper_bound):
+    return T.maximum(T.minimum(val, upper_bound), lower_bound)
+
 def SGD(lr, params, grads, loss, w_decay, momentum):
     updates = []
     for param, grad in zip(params, grads):
-        vel = theano.shared(param.val.get_value() * 0.)
+        val = theano.shared(param.val.get_value() * 0.)
 
         if param.is_bias or w_decay == 0:
-            regularized_grad = grad
+            regularized_grad = grad_clip(grad, -1, 1)
         else:
-            regularized_grad = grad + w_decay * param.val
+            regularized_grad = grad_clip(grad, -1, 1) + w_decay * param.val
 
-        param_additive = momentum * vel - lr * regularized_grad
-        updates.append((vel, param_additive))
+        param_additive = momentum * val - lr * regularized_grad
+        updates.append((val, param_additive))
         updates.append((param.val, param.val + param_additive))
 
     return updates
@@ -45,22 +48,22 @@ def ADAM(lr, params, grads, loss, iteration, w_decay, beta_1=0.9, beta_2=0.999, 
     lr_t = lr * T.sqrt(1 - T.pow(beta_2, t)) / (1 - T.pow(beta_1, t))
 
     updates = []
-    for p, g in zip(params, grads):
-        m = theano.shared(p.val.get_value() * 0.)   # zero init of moment
-        v = theano.shared(p.val.get_value() * 0.)   # zero init of velocity
+    for param, grad in zip(params, grads):
+        m = theano.shared(param.val.get_value() * 0.)   # zero init of moment
+        v = theano.shared(param.val.get_value() * 0.)   # zero init of velocity
 
-        if p.is_bias or w_decay == 0:
-            regularized_g = g
+        if param.is_bias or w_decay == 0:
+            regularized_grad = grad_clip(grad, -1, 1)
         else:
-            regularized_g = g + w_decay * p.val
+            regularized_grad = grad_clip(grad, -1, 1) + w_decay * param.val
 
-        m_t = (beta_1 * m) + (1 - beta_1) * regularized_g
-        v_t = (beta_2 * v) + (1 - beta_2) * T.square(regularized_g)
-        p_t = p.val - lr_t * m_t / (T.sqrt(v_t) + epsilon)
+        m_t = (beta_1 * m) + (1 - beta_1) * regularized_grad
+        v_t = (beta_2 * v) + (1 - beta_2) * T.square(regularized_grad)
+        p_t = param.val - lr_t * m_t / (T.sqrt(v_t) + epsilon)
 
         updates.append((m, m_t))
         updates.append((v, v_t))
-        updates.append((p.val, p_t))
+        updates.append((param.val, p_t))
 
     return updates
 

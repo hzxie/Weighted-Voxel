@@ -10,7 +10,7 @@
 import collections
 import numpy as np
 import theano
-import theano.tensor as tensor
+import theano.tensor as T
 
 from theano.tensor.nnet import conv2d, conv3d2d, sigmoid
 from theano.tensor.signal import pool
@@ -155,7 +155,7 @@ class TensorProductLayer(Layer):
         self._output_shape.append(n_out)
 
     def set_output(self):
-        self._output = tensor.dot(self._prev_layer.output, self.W.val)
+        self._output = T.dot(self._prev_layer.output, self.W.val)
         if self._bias:
             self._output += self.b.val
 
@@ -193,11 +193,11 @@ class BlockDiagonalLayer(Layer):
             self.params.append(self.b)
 
     def set_output(self):
-        self._output = tensor.sum(tensor.shape_padright(self._prev_layer.output) *
-                                  tensor.shape_padleft(self.W.val),
+        self._output = T.sum(T.shape_padright(self._prev_layer.output) *
+                                  T.shape_padleft(self.W.val),
                                   axis=-2)
         if self._bias:
-            self._output += tensor.shape_padleft(self.b.val)
+            self._output += T.shape_padleft(self.b.val)
 
 class AddLayer(Layer):
     def __init__(self, prev_layer, add_layer):
@@ -247,7 +247,7 @@ class ReshapeLayer(Layer):
         print('Reshape the prev layer to [%s]' % ','.join(str(x) for x in self._output_shape))
 
     def set_output(self):
-        self._output = tensor.reshape(self._prev_layer.output, self._output_shape)
+        self._output = T.reshape(self._prev_layer.output, self._output_shape)
 
 class ConvLayer(Layer):
     """Conv Layer
@@ -286,13 +286,13 @@ class ConvLayer(Layer):
 
     def set_output(self):
         if sum(self._padding) > 0:
-            padded_input = tensor.alloc(0.0,  # Value to fill the tensor
+            padded_input = T.alloc(0.0,  # Value to fill the tensor
                                         self._input_shape[0],
                                         self._input_shape[1],
                                         self._input_shape[2] + 2 * self._padding[2],
                                         self._input_shape[3] + 2 * self._padding[3])
 
-            padded_input = tensor.set_subtensor(
+            padded_input = T.set_subtensor(
                 padded_input[:, :, self._padding[2]:self._padding[2] + self._input_shape[2],
                              self._padding[3]:self._padding[3] + self._input_shape[3]],
                 self._prev_layer.output)
@@ -353,14 +353,14 @@ class Unpool3DLayer(Layer):
         output_shape = self._output_shape
         padding = self._padding
         unpool_size = self._unpool_size
-        unpooled_output = tensor.alloc(0.0,  # Value to fill the tensor
+        unpooled_output = T.alloc(0.0,  # Value to fill the tensor
                                        output_shape[0],
                                        output_shape[1] + 2 * padding[0],
                                        output_shape[2],
                                        output_shape[3] + 2 * padding[1],
                                        output_shape[4] + 2 * padding[2])
 
-        unpooled_output = tensor.set_subtensor(unpooled_output[:, padding[0]:output_shape[
+        unpooled_output = T.set_subtensor(unpooled_output[:, padding[0]:output_shape[
             1] + padding[0]:unpool_size[0], :, padding[1]:output_shape[3] + padding[1]:unpool_size[
                 1], padding[2]:output_shape[4] + padding[2]:unpool_size[2]],
                                                self._prev_layer.output)
@@ -403,14 +403,14 @@ class Conv3DLayer(Layer):
         padding = self._padding
         input_shape = self._input_shape
         if np.sum(self._padding) > 0:
-            padded_input = tensor.alloc(0.0,  # Value to fill the tensor
+            padded_input = T.alloc(0.0,  # Value to fill the tensor
                                         input_shape[0],
                                         input_shape[1] + 2 * padding[1],
                                         input_shape[2],
                                         input_shape[3] + 2 * padding[3],
                                         input_shape[4] + 2 * padding[4])
 
-            padded_input = tensor.set_subtensor(
+            padded_input = T.set_subtensor(
                 padded_input[:, padding[1]:padding[1] + input_shape[1], :, padding[3]:padding[3] +
                              input_shape[3], padding[4]:padding[4] + input_shape[4]],
                 self._prev_layer.output)
@@ -465,19 +465,19 @@ class FCConv3DLayer(Layer):
     def set_output(self):
         padding = self._padding
         input_shape = self._input_shape
-        padded_input = tensor.alloc(0.0,  # Value to fill the tensor
+        padded_input = T.alloc(0.0,  # Value to fill the tensor
                                     input_shape[0],
                                     input_shape[1] + 2 * padding[1],
                                     input_shape[2],
                                     input_shape[3] + 2 * padding[3],
                                     input_shape[4] + 2 * padding[4])
 
-        padded_input = tensor.set_subtensor(padded_input[:, padding[1]:padding[1] + input_shape[
+        padded_input = T.set_subtensor(padded_input[:, padding[1]:padding[1] + input_shape[
             1], :, padding[3]:padding[3] + input_shape[3], padding[4]:padding[4] + input_shape[4]],
                                             self._prev_layer.output)
 
-        fc_output = tensor.reshape(
-            tensor.dot(self._fc_layer.output, self.Wx.val), self._output_shape)
+        fc_output = T.reshape(
+            T.dot(self._fc_layer.output, self.Wx.val), self._output_shape)
         self._output = conv3d2d.conv3d(padded_input, self.Wh.val) + \
             fc_output + self.b.val.dimshuffle('x', 'x', 0, 'x', 'x')
 
@@ -534,14 +534,14 @@ class Conv3DLSTMLayer(Layer):
     def set_output(self):
         padding = self._padding
         input_shape = self._input_shape
-        padded_input = tensor.alloc(0.0,  # Value to fill the tensor
+        padded_input = T.alloc(0.0,  # Value to fill the tensor
                                     input_shape[0],
                                     input_shape[1] + 2 * padding[1],
                                     input_shape[2],
                                     input_shape[3] + 2 * padding[3],
                                     input_shape[4] + 2 * padding[4])
 
-        padded_input = tensor.set_subtensor(padded_input[:, padding[1]:padding[1] + input_shape[
+        padded_input = T.set_subtensor(padded_input[:, padding[1]:padding[1] + input_shape[
             1], :, padding[3]:padding[3] + input_shape[3], padding[4]:padding[4] + input_shape[4]],
                                             self._prev_layer.output)
 
@@ -554,7 +554,7 @@ class MseLoss3D(object):
     """
     def __init__(self, input):
         self.input = input
-        self.exp_x = tensor.exp(-self.input)
+        self.exp_x = T.exp(-self.input)
 
     def prediction(self):
         return 1 / (1 + self.exp_x)
@@ -565,7 +565,7 @@ class MseLoss3D(object):
         channel, only one element is one indicating the ground truth prediction
         label.
         """
-        return tensor.mean(tensor.sqr(self.input - y))
+        return T.mean(T.sqr(self.input - y))
 
 class ConcatLayer(Layer):
     def __init__(self, prev_layers, axis=1):
@@ -587,7 +587,7 @@ class ConcatLayer(Layer):
         print('Concat the prev layer to [%s]' % ','.join(str(x) for x in self._output_shape))
 
     def set_output(self):
-        self._output = tensor.concatenate([x.output for x in self._prev_layers], axis=self._axis)
+        self._output = T.concatenate([x.output for x in self._prev_layers], axis=self._axis)
 
 class LeakyReLU(Layer):
     def __init__(self, prev_layer, leakiness=0.01):
@@ -621,7 +621,7 @@ class TanhLayer(Layer):
         super().__init__(prev_layer)
 
     def set_output(self):
-        self._output = tensor.tanh(self._prev_layer.output)
+        self._output = T.tanh(self._prev_layer.output)
 
 class ComplementLayer(Layer):
     """ Compute 1 - input_layer.output """
@@ -630,4 +630,4 @@ class ComplementLayer(Layer):
         self._output_shape = self._input_shape
 
     def set_output(self):
-        self._output = tensor.ones_like(self._prev_layer.output) - self._prev_layer.output
+        self._output = T.ones_like(self._prev_layer.output) - self._prev_layer.output
