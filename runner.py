@@ -30,9 +30,9 @@ def get_args_from_command_line():
         default=cfg.CONST.DEVICE,
         type=str)
     parser.add_argument(
-        '--rand', dest='randomize', help='randomize (do not use a fixed seed)', action='store_true')
+        '--rand', dest='randomize', help='Randomize (do not use a fixed seed)', action='store_true')
     parser.add_argument(
-        '--test', dest='test', help='randomize (do not use a fixed seed)', action='store_true')
+        '--test', dest='test', help='Test neural networks', action='store_true')
     parser.add_argument(
         '--batch-size',
         dest='batch_size',
@@ -47,7 +47,7 @@ def get_args_from_command_line():
         type=int)
     parser.add_argument(
         '--weights', dest='weights', help='Initialize network from the weights file', default=None)
-    parser.add_argument('--out', dest='out_path', help='set output path', default=cfg.DIR.OUT_PATH)
+    parser.add_argument('--out', dest='out_path', help='Set output path', default=cfg.DIR.OUT_PATH)
     parser.add_argument(
         '--init-iter',
         dest='init_iter',

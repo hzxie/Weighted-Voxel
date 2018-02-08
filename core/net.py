@@ -9,7 +9,7 @@
 
 import numpy as np
 import theano
-import theano.tensor as tensor
+import theano.tensor as T
 
 from datetime import datetime as dt
 
@@ -18,7 +18,7 @@ from core.layers import TensorProductLayer, ConvLayer, PoolLayer, Unpool3DLayer,
     FCConv3DLayer, TanhLayer, SigmoidLayer, ComplementLayer, AddLayer, \
     EltwiseMultiplyLayer, get_trainable_params
 
-tensor5 = tensor.TensorType(theano.config.floatX, (False,) * 5)
+tensor5 = T.TensorType(theano.config.floatX, (False,) * 5)
 
 class BaseNet(object):
     def __init__(self, config, random_seed, compute_grad):
@@ -59,15 +59,15 @@ class BaseNet(object):
 
     def post_processing(self):
         if self.compute_grad:
-            self.grads = tensor.grad(self.loss, [param.val for param in self.params])
+            self.grads = T.grad(self.loss, [param.val for param in self.params])
 
     def save(self, filename):
         params_cpu = []
         for param in self.params:
             params_cpu.append(param.val.get_value())
         
-        np.save(filename, params_cpu)
         print('[INFO] %s Saving network parameters to %s' % (dt.now(), filename))
+        np.save(filename, params_cpu)
 
     def load(self, filename, ignore_param=True):
         print('[INFO] %s Loading network parameters from %s' % (dt.now(), filename))
@@ -222,9 +222,9 @@ class ReconstructionNet(BaseNet):
 
         s_update, _ = theano.scan(recurrence,
             sequences=[self.x],  # along with images, feed in the index of the current frame
-            outputs_info=[tensor.zeros_like(np.zeros(s_shape),
+            outputs_info=[T.zeros_like(np.zeros(s_shape),
                                             dtype=theano.config.floatX),
-                           tensor.zeros_like(np.zeros(s_shape),
+                           T.zeros_like(np.zeros(s_shape),
                                              dtype=theano.config.floatX)])
 
         update_all = s_update[-1]

@@ -51,6 +51,9 @@ def test_net(cfg):
     categories = []
 
     for imgs, voxel in get_while_running(processes[0], queue):
+        if batch_idx == n_test_data:
+            break                       # Reach the end of the test sample + 1
+
         c_id = data_pair[batch_idx][0] # Category of the sample
         s_id = data_pair[batch_idx][1] # ID of the sample
         prediction, loss, activations = solver.test_output(imgs, voxel)
@@ -71,7 +74,7 @@ def test_net(cfg):
             ious.append(iou)
 
         # Print test result of the sample
-        print('[INFO] %04d/%d\tID: %s\tCategory: %s\tIoU: %s' % (batch_idx, n_test_data, s_id, c_id, ious))
+        print('[INFO] %04d/%d\tID: %s\tCategory: %s\tIoU: %s' % (batch_idx + 1, n_test_data, s_id, c_id, ious))
         batch_idx +=1
 
     # Print summarized results
@@ -86,10 +89,11 @@ def test_net(cfg):
         print(c, end='\t')
         for t in cfg.TEST.VOXEL_THRESH:
             print(np.mean(results['categories'][t][c]), end='\t')
+        print()
         
-        print('\nMean', end='\t\t')
-        for t in cfg.TEST.VOXEL_THRESH:
-            print(np.mean(results['samples'][t]), end='\t')
+    print('Mean', end='\t\t')
+    for t in cfg.TEST.VOXEL_THRESH:
+        print(np.mean(results['samples'][t]), end='\t')
     print()
 
     # Cleanup the processes and the queue.

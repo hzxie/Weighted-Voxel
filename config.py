@@ -37,8 +37,8 @@ __C.CONST.MIN_VOXEL_VALUE           = -53
 #
 __C.DIR = edict()
 __C.DIR.DATASET_TAXONOMY_FILE_PATH  = './datasets/ShapeNet.json'
-__C.DIR.DATASET_QUERY_PATH          = './datasets/ShapeNet/ShapeNetVox32/'
-__C.DIR.VOXEL_PATH                  = './datasets/ShapeNet/ShapeNetVox32/%s/%s/model.binvox'
+__C.DIR.DATASET_QUERY_PATH          = './datasets/ShapeNet/WeightedShapeNetVox32/'
+__C.DIR.VOXEL_PATH                  = './datasets/ShapeNet/WeightedShapeNetVox32/%s/%s/model.binvox'
 __C.DIR.RENDERING_PATH              = './datasets/ShapeNet/ShapeNetRendering/%s/%s/rendering'
 __C.DIR.OUT_PATH                    = './output'
 
@@ -79,7 +79,6 @@ __C.TRAIN.PRINT_FREQ                = 50
 # Testing options
 #
 __C.TEST                            = edict()
-__C.TEST.EXP_NAME                   = 'test'
 __C.TEST.DATASET_PORTION            = [.8, 1]
 __C.TEST.NO_BG_COLOR_RANGE          = [[240, 240], [240, 240], [240, 240]]
 __C.TEST.VOXEL_THRESH               = [5e-14]
