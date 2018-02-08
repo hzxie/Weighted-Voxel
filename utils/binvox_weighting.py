@@ -23,11 +23,13 @@ def transform_voxel_data(voxels, n_voxs):
                 for m in range(i - 1, i + 2):
                     for n in range(j - 1, j + 2):
                         for p in range(k - 1, k + 2):
-                            if m < 0 or n < 0 or p < 0 or m >= n_voxs[0] or n >= n_voxs[1] or p >= n_voxs[2]:
-                                continue
-
                             weight = OMEGA if m == i and n == j and p == k else 1
-                            if voxels[m][n][p]:
+                            v = 0
+
+                            if m >= 0 and n >= 0 and p >= 0 and m < n_voxs[0] and n < n_voxs[1] and p < n_voxs[2]:
+                               v = voxels[m][n][p]
+
+                            if v:
                                 ones_count += weight
                             else:
                                 zeros_count += weight
@@ -35,8 +37,6 @@ def transform_voxel_data(voxels, n_voxs):
                 # VOXEL_MIN_VALUE is used for normalizing to values with minimum value 0
                 # The value in binvox cannot less than 0
                 value = ones_count - zeros_count
-                if value < 0:
-                    value = -math.sqrt(-value) * 2
                 weighted_voxels[i][j][k] = value - VOXEL_MIN_VALUE
 
     return weighted_voxels
