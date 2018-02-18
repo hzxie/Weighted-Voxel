@@ -67,7 +67,9 @@ def test_net(cfg):
 
             if not c_id in results['categories'][threshold]:
                 results['categories'][threshold][c_id] = []
-                categories.append(c_id)
+                if not c_id in categories:
+                    categories.append(c_id)
+
 
             results['samples'][threshold].append(iou)
             results['categories'][threshold][c_id].append(iou)
@@ -82,7 +84,7 @@ def test_net(cfg):
 
     print('Category ID', end='\t')
     for t in cfg.TEST.VOXEL_THRESH:
-        print('t = %g' % t, end='\t')
+        print('%g' % t, end='\t')
     print()
 
     for c in categories:
