@@ -28,7 +28,7 @@ __C.CONST.IMG_H                     = 127
 __C.CONST.N_VOX                     = 32
 __C.CONST.N_GRU_VOX                 = 4
 __C.CONST.N_VIEWS                   = 5
-__C.CONST.BATCH_SIZE                = 20
+__C.CONST.BATCH_SIZE                = 24
 __C.CONST.WEIGHTS                   = ''         # When set, load the weights from the file
 __C.CONST.MIN_VOXEL_VALUE           = -53
 
@@ -67,7 +67,7 @@ __C.TRAIN.NO_BG_COLOR_RANGE         = [[225, 255], [225, 255], [225, 255]]
 ## Learning
 __C.TRAIN.DEFAULT_LEARNING_RATE     = 1e-5      # for SGD use 0.1, for ADAM, use 1e-5
 __C.TRAIN.POLICY                    = 'adam'    # available options: sgd, adam
-__C.TRAIN.LEARNING_RATES            = {}		# example: {'250': 7.5e-6, '500': 5e-6}
+__C.TRAIN.LEARNING_RATES            = {}        # example: {'250': 7.5e-6, '500': 5e-6}
 __C.TRAIN.MOMENTUM                  = .9
 __C.TRAIN.DYNAMIC_LR_ITERATION      = 500       # the interation number that uses the policy to adjust learning rate
 __C.TRAIN.WEIGHT_DECAY              = 5e-6
@@ -81,4 +81,4 @@ __C.TRAIN.PRINT_FREQ                = 50
 __C.TEST                            = edict()
 __C.TEST.DATASET_PORTION            = [.8, 1]
 __C.TEST.NO_BG_COLOR_RANGE          = [[240, 240], [240, 240], [240, 240]]
-__C.TEST.VOXEL_THRESH               = [5e-14]
+__C.TEST.VOXEL_THRESH               = [5e-7]
