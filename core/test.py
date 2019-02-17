@@ -90,12 +90,12 @@ def test_net(cfg):
     for c in categories:
         print(c, end='\t')
         for t in cfg.TEST.VOXEL_THRESH:
-            print('.4f' % np.mean(results['categories'][t][c]), end='\t')
+            print('%.4f' % np.mean(results['categories'][t][c]), end='\t')
         print()
         
     print('Mean', end='\t\t')
     for t in cfg.TEST.VOXEL_THRESH:
-        print('.4f' % np.mean(results['samples'][t]), end='\t')
+        print('%.4f' % np.mean(results['samples'][t]), end='\t')
     print()
 
     # Cleanup the processes and the queue.
