@@ -1,6 +1,6 @@
 # Weighted-Voxel
 
-This repository contains the source codes for the paper [Weighted Voxel: a novel voxel representation for 3D reconstruction (Xie et al. 2018)](https://doi.org/10.1145/3240876.3240888).
+This repository contains the source codes for the paper [Weighted Voxel: a novel voxel representation for 3D reconstruction (Xie et al. 2018)](https://dl.acm.org/citation.cfm?id=3240888).
 
 ## Abstract
 
@@ -85,10 +85,10 @@ cd /path/to/the/repository
 mkdir -p datasets/ShapeNet
 cd datasets/ShapeNet
 
-wget ftp://cs.stanford.edu/cs/cvgl/ShapeNetRendering.tgz
+wget http://cvgl.stanford.edu/data2/ShapeNetRendering.tgz
 tar -xf ShapeNetRendering.tgz
 
-wget ftp://cs.stanford.edu/cs/cvgl/ShapeNetVox32.tgz
+wget http://cvgl.stanford.edu/data2/ShapeNetVox32.tgz
 tar -xf ShapeNetVox32.tgz
 ```
 
@@ -114,6 +114,8 @@ python3 runner.py \
       --test \
       --weights output/weights.npy
 ```
+
+The pretrained model can be downloaded from [here](https://gateway.infinitescript.com/?fileName=Weighted-Voxel.npy) (206 MB).
 
 ## License
 
